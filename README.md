@@ -1,16 +1,6 @@
 # crypto_karami
 
-A new Flutter project.
+A new Flutter CryptoCurrency project.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![Screenshot_1653149616](https://user-images.githubusercontent.com/26430987/169660255-d4ecaead-44c7-49e4-8699-ddb7697545ff.png)
+![Screenshot_1653149618](https://user-images.githubusercontent.com/26430987/169660257-75d51c37-4f55-4819-aa8c-28087dd5d300.png)
