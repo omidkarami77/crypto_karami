@@ -7,13 +7,13 @@ import 'data/model/crypto.dart';
 class CoinListScreen extends StatefulWidget {
   CoinListScreen({Key? key, this.cryptoes}) : super(key: key);
   List<Crypto>? cryptoes;
-
   @override
   State<CoinListScreen> createState() => _CoinListScreenState();
 }
 
 class _CoinListScreenState extends State<CoinListScreen> {
   List<Crypto>? cryptos;
+  bool isSearchLoadingVisible = false;
 
   @override
   void initState() {
@@ -35,17 +35,55 @@ class _CoinListScreenState extends State<CoinListScreen> {
       ),
       backgroundColor: blackColor,
       body: SafeArea(
-        child: RefreshIndicator(
-            color: blackColor,
-            backgroundColor: greenColor,
-            onRefresh: () async {
-              List<Crypto>? freshData = await getDataCrypto();
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(8),
+              child: Directionality(
+                textDirection: TextDirection.rtl,
+                child: TextField(
+                  onChanged: (value) {
+                    _filterlist(value);
+                    print(value);
+                  },
+                  decoration: InputDecoration(
+                      hintText: 'اسم رمز ارز معتبر را سرچ کنید',
+                      hintStyle: TextStyle(
+                          fontFamily: 'omidfont',
+                          color: Colors.white,
+                          fontSize: 18),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide:
+                            BorderSide(width: 0, style: BorderStyle.none),
+                      ),
+                      filled: true,
+                      fillColor: greenColor),
+                ),
+              ),
+            ),
+            Visibility(
+                visible: isSearchLoadingVisible,
+                child: Text(
+                  'در حال آپدیت اطلاعات رمز ارز ها...',
+                  style: TextStyle(color: greenColor, fontFamily: 'omidfont'),
+                )),
+            Expanded(
+              child: RefreshIndicator(
+                color: blackColor,
+                backgroundColor: greenColor,
+                onRefresh: () async {
+                  List<Crypto>? freshData = await getDataCrypto();
 
-              setState(() {
-                cryptos = freshData;
-              });
-            },
-            child: getListView()),
+                  setState(() {
+                    cryptos = freshData;
+                  });
+                },
+                child: getListView(),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -133,5 +171,27 @@ class _CoinListScreenState extends State<CoinListScreen> {
         .toList();
 
     return cryptos;
+  }
+
+  Future<void> _filterlist(String keyValue) async {
+    List<Crypto> cryptoList = [];
+    if (keyValue.isEmpty) {
+      setState(() {
+        isSearchLoadingVisible = true;
+      });
+      var result = await getDataCrypto();
+      setState(() {
+        cryptos = result;
+        isSearchLoadingVisible = false;
+      });
+      return;
+    }
+    cryptoList = cryptos!.where((element) {
+      return element.name!.toLowerCase().contains(keyValue.toLowerCase());
+    }).toList();
+
+    setState(() {
+      cryptos = cryptoList;
+    });
   }
 }
